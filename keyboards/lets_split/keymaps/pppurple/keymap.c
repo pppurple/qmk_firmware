@@ -5,68 +5,125 @@
 
 extern keymap_config_t keymap_config;
 
-#define QWERTY_LAYER 0
-#define LOWER_LAYER 1
-#define UPPER_LAYER 2
-#define SPACEFN_LAYER 3
-#define TENKEY_LAYER 4
-#define NORMAN_LAYER 5
-#define UNDERGLOW_LAYER 6
+// Each layer gets a name for readability, which is then used in the keymap matrix below.
+// The underscores don't mean anything - you can have a layer called STUFF or any other name.
+// Layer names don't all need to be of the same length, obviously, and you can also skip them
+// entirely and just use numbers.
+#define _QWERTY 0
+#define _LOWER 1
+#define _RAISE 2
+#define _ADJUST 16
 
-// Tap Dance
-enum {
-  SFT_CAPS = 0,
-  MPLY_MUTE = 2,
+enum custom_keycodes {
+  QWERTY = SAFE_RANGE,
+  LOWER,
+  RAISE,
+  ADJUST,
 };
 
-// Macros
-enum macro_id {
-  M_USERNAME,
-  M_RANDDIGIT,
-  M_RANDLETTER,
-};
+// Fillers to make layering more clear
+#define _______ KC_TRNS
+#define XXXXXXX KC_NO
 
-""
-GUI
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
-/* Qwerty
+/* Qwerty(Mac)
  * ,-----------------------------------------------------------------------------------.
  * | Esc  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Ctrl |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  :   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |Adjust|      | Alt  |  英数 |Lower |Space |Space |Raise | Left | Down |  Up  |Right |
+ * | Ctrl |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  | Enter|
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  | Up   |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | GUI  |  Fn  | Alt  | Eisu |Lower |Space |Space |Raise | Kana | Left | Down |Right |
+ * `-----------------------------------------------------------------------------------'
+
+ * Qwerty(Win)
+ * ,-----------------------------------------------------------------------------------.
+ * | Esc  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | Ctrl |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  | Enter|
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  | Up   |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * | GUI  |  Fn  | Alt  | MHEN |Lower |Space |Space |Raise | HENK | Left | Down |Right |
  * `-----------------------------------------------------------------------------------'
  */
+/*
+// Mac
+[_QWERTY] = KEYMAP( \
+  KC_ESC,   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
+  KC_LCTL,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT, \
+  KC_LSFT,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_UP, \
+  KC_LGUI,  _______, KC_LALT, KC_LANG2,LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LANG1,KC_LEFT ,KC_DOWN, KC_RGHT \
+),
+*/
 
-`
+// Win
+[_QWERTY] = KEYMAP( \
+  KC_ESC,   KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
+  KC_LCTL,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_ENT, \
+  KC_LSFT,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_UP, \
+  KC_LGUI,  _______, KC_LALT, KC_MHEN, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_HENK, KC_LEFT ,KC_DOWN, KC_RGHT \
+),
 
+/*[_QWERTY] = KEYMAP( \
+  KC_TAB,  KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,    KC_BSPC, \
+  KC_ESC,  KC_A,    KC_S,    KC_D,    KC_F,    KC_G,    KC_H,    KC_J,    KC_K,    KC_L,    KC_SCLN, KC_QUOT, \
+  KC_LSFT, KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_N,    KC_M,    KC_COMM, KC_DOT,  KC_SLSH, KC_ENT , \
+  ADJUST,  KC_LCTL, KC_LALT, KC_LGUI, LOWER,   KC_SPC,  KC_SPC,  RAISE,   KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT \
+),
+*/
 /* Raise
  * ,-----------------------------------------------------------------------------------.
  * | Tab  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Del  |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   -  |   =  |   [  |   ]  |  \   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |ISO # |ISO / |      |      |Enter |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
+ * |      |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |  F8  |  F9  |  F10 |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |  F11 |  F12 |      |      |      |      |      |      |      |      |      |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |      |      |      |      |      |      | Next | Vol- | Vol+ | Play |
  * `-----------------------------------------------------------------------------------'
  */
+[_RAISE] = KEYMAP( \
+  KC_TAB,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_DEL, \
+  _______, KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,  _______, \
+  _______, KC_F11,  KC_F12,  _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY \
+),
 
+/*[_RAISE] = KEYMAP( \
+  KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC, \
+  KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS, \
+  _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NUHS, KC_NUBS, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY \
+),
+*/
 /* Lower
  * ,-----------------------------------------------------------------------------------.
- * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  | Bksp |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   _  |   +  |     |    \  |  |   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |ISO ~ |ISO | |      |      |Enter |
+ * |   !  |   "  |   #  |   $  |   %  |   &  |   '  |  (   |   )  |   =  |   ~  |  |   |
  * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
+ * |      |      |ISO # |ISO / |   ^  |   *  |   +  |  {   |   }  |   -  |   @  |   `  |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |ISO ~ |ISO | |      |      |      |  [   |   ]  |   ¥  |   \  |  _   |
+ * |------+------+------+------+------+------+------+------+------+------+------+------|
+ * |      |      |      |      |      |      |      |      | Next | Vol- | Vol+ | Play |
  * `-----------------------------------------------------------------------------------'
  */
+[_LOWER] = KEYMAP( \
+  KC_EXLM, KC_QUOT, KC_HASH,  KC_DLR,    KC_PERC, KC_AMPR, _______, KC_LPRN, KC_RPRN, KC_EQL,  KC_TILD, KC_PIPE, \
+  _______, _______, KC_NUHS,  KC_NUBS,   KC_CIRC, KC_ASTR, KC_PLUS, KC_LCBR, KC_RCBR, KC_MINS, KC_AT,   KC_GRV, \
+  _______, _______,S(KC_NUHS),S(KC_NUBS),_______, _______, _______, KC_LBRC, KC_RBRC, KC_INT3, KC_BSLS, KC_UNDS, \
+  _______, _______, _______,  _______,   _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY \
+),
 
+/*[_LOWER] = KEYMAP( \
+  KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC, \
+  KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE, \
+  _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,S(KC_NUHS),S(KC_NUBS),_______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, KC_MNXT, KC_VOLD, KC_VOLU, KC_MPLY \
+),
+*/
 /* Adjust (Lower + Raise)
  * ,-----------------------------------------------------------------------------------.
  * |      | Reset|      |      |      |      |      |      |      |      |      |  Del |
@@ -78,170 +135,85 @@ GUI
  * |      |      |      |      |      |             |      |      |      |      |      |
  * `-----------------------------------------------------------------------------------'
  */
+[_ADJUST] =  KEYMAP( \
+  _______, RESET,   _______, _______, _______, _______, _______, _______, _______, _______, _______, KC_DEL, \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, \
+  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ \
+)
 
-/* Qwerty
- * ,-----------------------------------------------------------------------------------.
- * | Tab  |   Q  |   W  |   E  |   R  |   T  |   Y  |   U  |   I  |   O  |   P  | Bksp |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Esc  |   A  |   S  |   D  |   F  |   G  |   H  |   J  |   K  |   L  |   ;  |  "   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * | Shift|   Z  |   X  |   C  |   V  |   B  |   N  |   M  |   ,  |   .  |   /  |Enter |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |Adjust| Ctrl | Alt  | GUI  |Lower |Space |Space |Raise | Left | Down |  Up  |Right |
- * `-----------------------------------------------------------------------------------'
- */
-
-/* Lower
- * ,-----------------------------------------------------------------------------------.
- * |   ~  |   !  |   @  |   #  |   $  |   %  |   ^  |   &  |   *  |   (  |   )  | Bksp |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   _  |   +  |     |    \  |  |   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |ISO ~ |ISO | |      |      |Enter |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
- * `-----------------------------------------------------------------------------------'
- */
-
-/* Raise
- * ,-----------------------------------------------------------------------------------.
- * |   `  |   1  |   2  |   3  |   4  |   5  |   6  |   7  |   8  |   9  |   0  | Bksp |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * | Del  |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |   -  |   =  |   [  |   ]  |  \   |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |ISO # |ISO / |      |      |Enter |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      | Next | Vol- | Vol+ | Play |
- * `-----------------------------------------------------------------------------------'
- */
-
-/* Adjust (Lower + Raise)
- * ,-----------------------------------------------------------------------------------.
- * |      | Reset|      |      |      |      |      |      |      |      |      |  Del |
- * |------+------+------+------+------+-------------+------+------+------+------+------|
- * |      |      |      |Aud on|Audoff|AGnorm|AGswap|Qwerty|Colemk|Dvorak|      |      |
- * |------+------+------+------+------+------|------+------+------+------+------+------|
- * |      |      |      |      |      |      |      |      |      |      |      |      |
- * |------+------+------+------+------+------+------+------+------+------+------+------|
- * |      |      |      |      |      |             |      |      |      |      |      |
- * `-----------------------------------------------------------------------------------'
- */
-const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-[QWERTY_LAYER] = KEYMAP( \
-  KC_TAB,            KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,     KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_BSPC, \
-  CTL_T(KC_ESC),     KC_A,     KC_S,     KC_D,     KC_F,     KC_G,     KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT, \
-  TD(SFT_CAPS),      KC_Z,     KC_X,     KC_C,     KC_V,     KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,  MT(MOD_RSFT, KC_ENT), \
-  MO(UNDERGLOW_LAYER),  KC_MEH,   KC_LALT,  KC_LGUI,  F(1),     F(3),     F(3),     F(2),  MT(MOD_RGUI, KC_LEFT),  KC_DOWN,  KC_UP,    KC_RGHT \
-),
-
-[UPPER_LAYER] = KEYMAP( \
-  KC_GRV,                KC_1,       KC_2,     KC_3,     KC_4,     KC_5,     KC_6,     KC_7,     KC_8,     KC_9,           KC_0,     _______, \
-  _______,               KC_4,       KC_5,     KC_6,     KC_DOT,   _______,  _______,  KC_MINS,  KC_EQL,   KC_LBRC,        KC_RBRC,  KC_BSLS, \
-  _______,               KC_7,       KC_8,     KC_9,     KC_0,     _______,  _______,  _______,  _______,  KC_DOT,        _______,  _______, \
-  TG(NORMAN_LAYER),     KC_HYPR,    _______,  _______,  _______,  _______,  _______,  _______,  TD(MPLY_MUTE),  KC_VOLD,  KC_VOLU,  KC_MFFD \
-),
-
-[LOWER_LAYER] = KEYMAP( \
-  KC_TILD,         KC_EXLM,   KC_AT,    KC_HASH,  KC_DLR,   KC_PERC,  KC_CIRC,  KC_AMPR,  KC_ASTR,  KC_LPRN,  KC_RPRN,  _______, \
-  _______,         KC_F1,     KC_F2,    KC_F3,    KC_F4,    KC_F5,    KC_F6,    KC_UNDS,  KC_PLUS,  KC_LCBR,  KC_RCBR,  KC_PIPE, \
-  _______,         KC_F7,     KC_F8,    KC_F9,    KC_F10,   KC_F11,   KC_F12,   _______,  _______,  _______,  _______,  _______, \
-  TG(TENKEY_LAYER),  KC_HYPR,   _______,  _______,  _______,  _______,  _______,  _______,  KC_HOME,  KC_PGDN,  KC_PGUP,  KC_END \
-),
-
-[SPACEFN_LAYER] = KEYMAP( \
-  _______,           _______,  M(M_USERNAME),    _______, LGUI(LSFT(KC_4)), LGUI(LCTL(LSFT(KC_4))),  _______, KC_HOME,           KC_UP,   KC_END,   _______, KC_DELETE, \
-  _______,           _______,  M(M_RANDDIGIT),   _______, _______,           _______,                KC_PGUP, KC_LEFT,           KC_DOWN, KC_RIGHT, _______, _______, \
-  _______,           _______,  M(M_RANDLETTER),  _______, _______,           _______,                KC_PGDN, LGUI(LSFT(KC_M)),  _______, _______,  _______, RESET, \
-  _______,  _______,  _______,          _______, _______,           _______,                _______, _______,           _______, _______,  _______, _______ \
-),
-
-[TENKEY_LAYER] = KEYMAP( \
-  _______, _______,  _______, _______, _______, _______, _______, KC_KP_7, KC_KP_8, KC_KP_9, KC_PMNS, KC_BSPC, \
-  _______, _______,  _______, _______, _______, _______, _______, KC_KP_4, KC_KP_5, KC_KP_6, KC_PPLS, KC_NLCK, \
-  _______, _______,  _______, _______, _______, _______, _______, KC_KP_1, KC_KP_2, KC_KP_3, KC_PDOT, KC_ENT, \
-  _______, _______,  _______, _______, _______, _______, _______, KC_KP_0, _______, _______, _______, _______ \
-),
-
-[NORMAN_LAYER] = KEYMAP( \
-  _______,  KC_Q,    KC_W,    KC_D,    KC_F,    KC_K,    KC_J,    KC_U,    KC_R,    KC_L,    KC_SCLN,  _______, \
-  _______,  KC_A,    KC_S,    KC_E,    KC_T,    KC_G,    KC_Y,    KC_N,    KC_I,    KC_O,    KC_H,     KC_QUOT, \
-  _______,  KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,    KC_P,    KC_M,    KC_COMM, KC_DOT,  _______,  KC_ENT, \
-  _______,  _______, _______, _______, _______, _______, _______, _______, _______, _______, _______, _______ \
-),
-
-[UNDERGLOW_LAYER] = KEYMAP( \
+/*
+RGB_TOG : RGBLED_TOGGLE: LED ON/OFF
+RGB_MOD : RGBLED_STEP_MODE: 点滅モードの切替
+RGB_HUI : RGBLED_INCREASE_HUE: 色調の変更(+)
+RGB_HUD : RGBLED_DECREASE_HUE: 色調の変更(-)
+RGB_SAI : RGBLED_INCREASE_SAT: 彩度の変更(+)
+RGB_SAD : RGBLED_DECREASE_SAT: 彩度の変更(-)
+RGB_VAI : RGBLED_INCREASE_VAL: 明るさの調整(+)
+RGB_VAD : RGBLED_DECREASE_VAL: 明るさの調整(-)
+*/
+/*
+[UNDERGLOW] = KEYMAP( \
   _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______, \
   _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______, \
-  _______,  RGB_TOG,  RGB_MOD,  RGB_HUD,  RGB_HUI,  RGB_SAD,  RGB_SAI,  RGB_VAD,  RGB_VAI,  _______,  _______,  _______, \
+  _______,  _______,  RGB_TOG,  RGB_MOD,  RGB_HUI,  RGB_HUD,  RGB_SAI,  RGB_SAD,  RGB_VAI,  RGB_VAD,  _______,  _______, \
   _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______,  _______ \
 ),
+*/
 };
 
-const uint16_t PROGMEM fn_actions[] = {
-    [0] = ACTION_DEFAULT_LAYER_SET(QWERTY_LAYER),
+#ifdef AUDIO_ENABLE
+float tone_qwerty[][2]     = SONG(QWERTY_SOUND);
+#endif
 
-    // Tap for backspace, hold for LOWER
-    [1] = ACTION_LAYER_TAP_KEY(LOWER_LAYER, KC_BSPC),
-
-    // Tap for enter, hold for RAISE
-    [2] = ACTION_LAYER_TAP_KEY(UPPER_LAYER, KC_ENT),
-
-    // Tap for space, hold for SpaceFN
-    [3] = ACTION_LAYER_TAP_KEY(SPACEFN_LAYER, KC_SPC),
-};
+void persistent_default_layer_set(uint16_t default_layer) {
+  eeconfig_update_default_layer(default_layer);
+  default_layer_set(default_layer);
+}
 
 qk_tap_dance_action_t tap_dance_actions[] = {
-  [SFT_CAPS] = ACTION_TAP_DANCE_DOUBLE(KC_LSFT, KC_CAPS),
-  [MPLY_MUTE] = ACTION_TAP_DANCE_DOUBLE(KC_MPLY, KC_MUTE)
+  // write tap dance if need
 };
 
-// This bit of logic seeds a wee linear congruential random number generator
-// lots of prime numbers everywhere...
-static uint16_t random_value = 157;
-
-const macro_t *action_get_macro(keyrecord_t *record, uint8_t id, uint8_t opt)
-{
-  uint8_t clockbyte=0;
-  clockbyte = TCNT1 % 256;
-  uint8_t rval;
-
-  // MACRODOWN only works in this function
-  switch(id) {
-    case M_USERNAME:
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  switch (keycode) {
+    case QWERTY:
       if (record->event.pressed) {
-        SEND_STRING("nicinabox");
+        #ifdef AUDIO_ENABLE
+          PLAY_SONG(tone_qwerty);
+        #endif
+        persistent_default_layer_set(1UL<<_QWERTY);
       }
+      return false;
       break;
-
-    case M_RANDDIGIT:
-      // Generate, based on random number generator, a keystroke for
-      // a numeric digit chosen at random
-      random_value = ((random_value + randadd) * randmul) % randmod;
+    case LOWER:
       if (record->event.pressed) {
-        // Here, we mix the LCRNG with low bits from one of the system
-        // clocks via XOR in the theory that this may be more random
-        // than either separately
-        rval = (random_value ^ clockbyte) % 10;
-        // Note that KC_1 thru KC_0 are a contiguous range
-        register_code (KC_1 + rval);
-        unregister_code (KC_1 + rval);
+        layer_on(_LOWER);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+      } else {
+        layer_off(_LOWER);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
       }
+      return false;
       break;
-
-    case M_RANDLETTER:
-      // Generate, based on random number generator, a keystroke for
-      // a letter chosen at random
-      // Here, we mix the LCRNG with low bits from one of the system
-      // clocks via XOR in the theory that this may be more random
-      // than either separately
-      random_value = ((random_value + randadd) * randmul) % randmod;
+    case RAISE:
       if (record->event.pressed) {
-        rval = (random_value ^ clockbyte) % 26;
-        register_code (KC_A + rval);
-        unregister_code (KC_A + rval);
+        layer_on(_RAISE);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
+      } else {
+        layer_off(_RAISE);
+        update_tri_layer(_LOWER, _RAISE, _ADJUST);
       }
+      return false;
+      break;
+    case ADJUST:
+      if (record->event.pressed) {
+        layer_on(_ADJUST);
+      } else {
+        layer_off(_ADJUST);
+      }
+      return false;
       break;
   }
-
-  return MACRO_NONE;
-};
+  return true;
+}
